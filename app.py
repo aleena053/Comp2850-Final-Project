@@ -52,3 +52,22 @@ def log_workout():
     cursor.execute(sql, values)
     db.commit()
     return "Workout Saved Successfully!"
+
+    @app.route('/save_competition', methods=['POST'])
+def save_competition():
+    cursor = db.cursor()
+    # Uses column names: finish_time, position, and notes[cite: 2]
+    sql = """
+        INSERT INTO CompetitionResult (user_id, competition_id, finish_time, position, notes) 
+        VALUES (%s, %s, %s, %s, %s)
+    """
+    data = (
+        session['user_id'], 
+        request.form.get('competition_id'), 
+        request.form.get('finish_time'), # Decimal[cite: 2]
+        request.form.get('position'), 
+        request.form.get('notes')
+    )
+    cursor.execute(sql, data)
+    db.commit()
+    return redirect('/dashboard')
