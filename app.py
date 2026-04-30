@@ -33,3 +33,22 @@ def register():
     cursor.execute(sql, (name, email, password, level, 'casual'))
     db.commit()
     return redirect('/dashboard')
+
+    @app.route('/log_workout', methods=['POST'])
+def log_workout():
+    cursor = db.cursor()
+    # Matches the Workout table requirement for durations and decimals
+    sql = """INSERT INTO Workout (user_id, sport_id, workout_date, duration, distance_km, notes) 
+             VALUES (%s, %s, %s, %s, %s, %s)"""
+    
+    values = (
+        session['user_id'], 
+        request.form.get('sport_id'),
+        request.form.get('date'),
+        request.form.get('duration'),
+        request.form.get('distance_km'), # Matches DECIMAL(10,2)
+        request.form.get('notes')
+    )
+    cursor.execute(sql, values)
+    db.commit()
+    return "Workout Saved Successfully!"
