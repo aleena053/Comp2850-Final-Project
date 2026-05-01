@@ -23,10 +23,10 @@ The application will include the following core features:
 
 # Development Team
 This project is being developed by a team of students as part of a software engineering coursework project:
-- Angelyn
-- Aleena
-- Ibrahim
-- Naza Azim
+- Angelyn Soe
+- Aleena Anwar
+- Ibrahim Patel
+- Naza Azim Nazary
 
 # Project Documentation
 The [wiki](https://github.com/aleena053/Comp2850-Final-Project/wiki) contains detailed documentation about the system and development process such as:
