@@ -1,0 +1,32 @@
+package com.example.myapplication
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+
+class Main : Activity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val sessionManager = SessionManager(this)
+
+        if (sessionManager.isLoggedIn()) {
+            val role = sessionManager.getUserRole()
+            val name = sessionManager.getUserName()
+            val email = sessionManager.getUserEmail()
+            val userId = sessionManager.getUserId()
+
+            intent.putExtra("USER_ID", userId)
+            intent.putExtra("USER_NAME", name)
+            intent.putExtra("USER_EMAIL", email)
+            intent.putExtra("USER_ROLE", role)
+
+            startActivity(intent)
+        } else {
+            startActivity(Intent(this, Home::class.java))
+        }
+
+        finish()
+    }
+}
