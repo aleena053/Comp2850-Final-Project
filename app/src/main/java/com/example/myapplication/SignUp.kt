@@ -24,8 +24,11 @@ class SignUp : Activity() {
     private lateinit var signupbutton: Button
     private lateinit var goToLogin: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //sets layout file for the sign up screen
         setContentView(R.layout.signup)
 
         bindViews()
@@ -33,6 +36,7 @@ class SignUp : Activity() {
         setupListeners()
     }
 
+    //connects xml to kotlin
     private fun bindViews() {
         accountType = findViewById(R.id.accountType)
         name = findViewById(R.id.name)
@@ -56,6 +60,7 @@ class SignUp : Activity() {
         accountType.adapter = adapter
     }
 
+    //sets what happens when the button is pressed
     private fun setupListeners() {
         signupbutton.setOnClickListener {
             signUpUser()
@@ -66,17 +71,23 @@ class SignUp : Activity() {
         }
     }
 
+    //begin sign up
     private fun signUpUser() {
+        //reads info entered by user
         val formData = readFormData()
+        //checks if all spaces have been filled
         val validationMessage = validateForm(formData)
 
+        //if not entered
         if (validationMessage != null) {
             showToast(validationMessage)
         } else {
+            //send info entered to the backend
             submitSignup(formData)
         }
     }
 
+    //reads values entered by user from the screen
     private fun readFormData(): SignUpFormData {
         return SignUpFormData(
             selectedAccountType = accountType.selectedItem.toString(),
@@ -88,6 +99,7 @@ class SignUp : Activity() {
         )
     }
 
+    //checks if the user has filled in all spaces
     private fun validateForm(formData: SignUpFormData): String? {
         val missingRequiredFields = formData.name.isEmpty() ||
                 formData.username.isEmpty() ||
@@ -109,6 +121,7 @@ class SignUp : Activity() {
         }
     }
 
+    //sends sign up request to backend api
     private fun submitSignup(formData: SignUpFormData) {
         val request = SignUpRequest(
             name = formData.name,
@@ -118,13 +131,19 @@ class SignUp : Activity() {
             role = formData.selectedAccountType.lowercase()
         )
 
+        //sends gin up request ot backend
         RetrofitClient.apiService.signUp(request).enqueue(object : Callback<ApiResponse> {
+            //runs when app receives a response from the backend
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                //check if request worked and backend shows sign up was successfull
                 if (response.isSuccessful && response.body()?.success == true) {
+
+                    //show succesfully created and go to login screen
                     showToast(ACCOUNT_CREATED_MESSAGE)
                     startActivity(Intent(this@SignUp, Login::class.java))
                     finish()
                 } else {
+                    //show backend error message if failed
                     showToast(parseSignupError(response))
                 }
             }
@@ -135,6 +154,7 @@ class SignUp : Activity() {
         })
     }
 
+    //reads and returns error message from backend api if ssign up failed
     private fun parseSignupError(response: Response<ApiResponse>): String {
         return try {
             val errorBody = response.errorBody()?.string()
@@ -145,6 +165,7 @@ class SignUp : Activity() {
         }
     }
 
+    //shows message on screen
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -166,6 +187,7 @@ class SignUp : Activity() {
     }
 }
 
+//holds data entered within sign up
 private data class SignUpFormData(
     val selectedAccountType: String,
     val name: String,

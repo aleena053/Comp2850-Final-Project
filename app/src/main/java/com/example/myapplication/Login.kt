@@ -19,17 +19,21 @@ class Login : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //sets layout file for the login screen
         setContentView(R.layout.login)
 
+        //links xml to this file
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
         loginbutton = findViewById(R.id.login)
         goToSignup = findViewById(R.id.goToSignup)
 
+        //when login is pressed it called login function
         loginbutton.setOnClickListener {
             loginUser()
         }
 
+        //opens Sign Up screen if Sign up is pressed
         goToSignup.setOnClickListener {
             startActivity(Intent(this, SignUp::class.java))
         }
@@ -46,6 +50,7 @@ class Login : Activity() {
 
         val request = LoginRequest(email, password)
 
+        //sends login request to backend using Retrofit
         RetrofitClient.apiService.login(request).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(
                 call: Call<ApiResponse>,
@@ -53,6 +58,7 @@ class Login : Activity() {
             ) {
                 val body = response.body()
 
+                //checks if login was successful
                 if (response.isSuccessful && body?.success == true && body.user != null) {
                     Toast.makeText(this@Login, "Login successful", Toast.LENGTH_SHORT).show()
 
@@ -61,14 +67,17 @@ class Login : Activity() {
                     val sessionManager = SessionManager(this@Login)
                     sessionManager.saveUserSession(user)
 
+                    //close login screen if login was successfull
                     finish()
                 } else {
+                    //if login fails
                     val message = body?.message ?: "Invalid email or password"
                     Toast.makeText(this@Login, message, Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                //show error if cannot connect to the backend api
                 Toast.makeText(this@Login, "Network error: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
