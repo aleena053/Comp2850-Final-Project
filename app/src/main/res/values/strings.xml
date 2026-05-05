@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="sport_label">Sport: %1$s</string>
+    <string name="pace_na">N/A</string>
+    <string name="pace_auto">Will be calculated automatically</string>
+    <string name="workout_date_label">Date: %1$s</string>
+    <string name="workout_duration_label">Duration: %1$d min</string>
+    <string name="workout_heart_rate_label">Avg heart rate: %1$s</string>
+    <string name="workout_notes_label">Notes: %1$s</string>
+    <string name="workout_distance_label">Distance: %1$s km</string>
+    <string name="workout_pace_label">Pace: %1$s min/km</string>
 </resources>

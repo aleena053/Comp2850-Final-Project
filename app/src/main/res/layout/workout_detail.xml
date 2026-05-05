@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <Button
+            android:id="@+id/backWorkoutDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <Spinner
+            android:id="@+id/sportDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/workoutDateDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Workout date"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:focusable="false"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/durationDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Duration (minutes)"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutCardioFieldsDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/distanceDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Distance (km)"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:textColorHint="#BDBDBD"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Average pace"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/calculatedPaceDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Will be calculated automatically"
+                android:textColor="#BDBDBD"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutGymFieldsDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercises"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutExerciseContainerDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <Button
+                android:id="@+id/addExerciseDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Exercise"
+                android:textAllCaps="false"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/avgHeartRateDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Average heart rate (optional)"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/notesDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notes (optional)"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/updateWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Workout"
+            android:textAllCaps="false"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/deleteWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Workout"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

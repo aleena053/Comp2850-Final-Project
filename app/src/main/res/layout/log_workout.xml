@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <Button
+            android:id="@+id/backLogWorkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/selectedSport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sport:"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="#2E2E2E"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/workoutDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Workout date"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:focusable="false"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Duration (minutes)"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutCardioFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Distance (km)"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:textColorHint="#BDBDBD"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Average pace"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/calculatedPace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Will be calculated automatically"
+                android:textColor="#BDBDBD"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutGymFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercises"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutExerciseContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <Button
+                android:id="@+id/addExercise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Exercise"
+                android:textAllCaps="false"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/avgHeartRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Average heart rate (optional)"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notes (optional)"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:textColor="@android:color/white"
+            android:textColorHint="#BDBDBD"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/saveWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Workout"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

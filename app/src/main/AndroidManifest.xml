@@ -34,6 +34,11 @@
         <activity
             android:name=".Main"
             android:exported="false" />
+
+        <activity android:name=".AthleteDashboard" />
+        <activity android:name=".LogWorkout" />
+        <activity android:name=".WorkoutHistory" />
+        <activity android:name=".WorkoutDetail" />
     </application>
 
 </manifest>

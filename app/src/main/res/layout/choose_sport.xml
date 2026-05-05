@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="28dp">
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/running"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:text="Running"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:backgroundTint="#3A3A3A"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/cycling"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:text="Cycling"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:backgroundTint="#3A3A3A"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/weightLifting"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:text="Weight Lifting"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:backgroundTint="#3A3A3A"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/swimming"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:text="Swimming"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:backgroundTint="#3A3A3A"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
