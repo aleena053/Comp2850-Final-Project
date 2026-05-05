@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#2A2A2A"
+    android:padding="12dp"
+    android:layout_marginBottom="12dp">
+
+    <EditText
+        android:id="@+id/exerciseNameItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Exercise name"
+        android:textColor="@android:color/white"
+        android:textColorHint="#BDBDBD"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/setsItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of sets"
+        android:inputType="number"
+        android:textColor="@android:color/white"
+        android:textColorHint="#BDBDBD"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/repsItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of reps"
+        android:inputType="number"
+        android:textColor="@android:color/white"
+        android:textColorHint="#BDBDBD"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/weightKgItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Weight (kg)"
+        android:inputType="numberDecimal"
+        android:textColor="@android:color/white"
+        android:textColorHint="#BDBDBD"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/removeExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove exercise"
+        android:textAllCaps="false" />
+</LinearLayout>

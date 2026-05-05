@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background"
+    android:padding="24dp">
+
+    <Button
+        android:id="@+id/backWorkoutHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="← Back"
+        android:textAllCaps="false"
+        android:textColor="@color/button_text_dark"
+        android:backgroundTint="@color/button_light"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/workoutHistoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workout History"
+        android:textColor="@color/text_primary"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/searchWorkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search workouts"
+        android:textColorHint="@color/text_secondary"
+        android:textColor="@color/text_primary"
+        android:backgroundTint="@color/input_line"
+        android:layout_marginBottom="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerWorkoutHistory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
