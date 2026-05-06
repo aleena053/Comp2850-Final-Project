@@ -1,6 +1,13 @@
 package com.example.myapplication
 
-// imports
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.view.View
+import java.time.YearMonth
+import androidx.core.graphics.toColorInt
 
 class CompetitionCalendarView @JvmOverloads constructor(
     context: Context,
@@ -9,7 +16,7 @@ class CompetitionCalendarView @JvmOverloads constructor(
 
     private var currentMonth: YearMonth = YearMonth.now()
     private var highlightedDays: Set<Int> = emptySet()
-    
+
     // set up paint for the monday-friday headers
     private val dayHeaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
@@ -17,14 +24,12 @@ class CompetitionCalendarView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
     }
-    
     // paint for the actual day numbers
     private val dayTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         textSize = DAY_TEXT_SIZE
         textAlign = Paint.Align.CENTER
     }
-    
     // paint for the blue circles on event days
     private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = HIGHLIGHT_COLOR.toColorInt()
@@ -83,7 +88,6 @@ class CompetitionCalendarView @JvmOverloads constructor(
             cellHeight = cellHeight
         )
     }
-
     // draws the day headers
     private fun drawWeekHeaders(
         canvas: Canvas,
@@ -149,5 +153,27 @@ class CompetitionCalendarView @JvmOverloads constructor(
         }
     }
 
-    // companion object stays same
+    companion object {
+        private const val HEADER_TEXT_SIZE = 26f
+        private const val DAY_TEXT_SIZE = 34f
+        private const val ROW_SPACING = 36f
+        private const val HEADER_TOP_OFFSET = 26f
+        private const val GRID_TOP_OFFSET = 28f
+        private const val HIGHLIGHT_RADIUS_MULTIPLIER = 0.28f
+        private const val HALF_DIVISOR = 2f
+        private const val COLUMN_COUNT = 7
+        private const val ROW_COUNT = 6
+        private const val ZERO_INDEX = 0
+        private const val FIRST_DAY_OF_MONTH = 1
+        private const val START_OFFSET_ADJUSTMENT = 1
+        private const val HIGHLIGHT_COLOR = "#3F51B5"
+        private const val MONDAY_LABEL = "M"
+        private const val TUESDAY_LABEL = "T"
+        private const val WEDNESDAY_LABEL = "W"
+        private const val THURSDAY_LABEL = "T"
+        private const val FRIDAY_LABEL = "F"
+        private const val SATURDAY_LABEL = "S"
+        private const val SUNDAY_LABEL = "S"
+    }
 }
+

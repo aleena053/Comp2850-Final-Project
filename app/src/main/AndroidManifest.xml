@@ -45,6 +45,13 @@
         <activity android:name=".AthleteTrainingPlans" />
         <activity android:name=".TrainingPlanDetail" />
         <activity android:name=".ChooseSport" />
+        <activity android:name=".Competitions" />
+        <activity android:name=".UpcomingCompetitions" />
+        <activity android:name=".PastResults" />
+        <activity android:name=".CompetitionCalendar" />
+        <activity android:name=".Messages" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".CreateGroup" />
     </application>
 
 </manifest>

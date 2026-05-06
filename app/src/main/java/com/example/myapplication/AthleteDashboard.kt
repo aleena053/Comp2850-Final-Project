@@ -74,6 +74,11 @@ class AthleteDashboard : Activity() {
             showSettingsDialog()
         }
 
+        //open messages when button is clicked
+        messages.setOnClickListener {
+            startActivity(Intent(this, Messages::class.java))
+        }
+
         // Navigate to workout logging screen
         logWorkout.setOnClickListener {
             startActivity(Intent(this, ChooseSport::class.java))
@@ -82,6 +87,14 @@ class AthleteDashboard : Activity() {
         // Navigate to workout history screen
         workoutHistory.setOnClickListener {
             startActivity(Intent(this, WorkoutHistory::class.java))
+        }
+
+        trainingPlans.setOnClickListener {
+            startActivity(Intent(this, AthleteTrainingPlans::class.java))
+        }
+
+        competitions.setOnClickListener {
+            startActivity(Intent(this, Competitions::class.java))
         }
 
         // Load dashboard stats when activity starts
