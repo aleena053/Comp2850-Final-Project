@@ -43,9 +43,6 @@ class TrainerDashboard : Activity() {
             },
             removeClick = { client ->
                 showRemoveClientDialog(client)
-            },
-            messageClick = { client ->
-                openDirectChatWithClient(client)
             }
         )
 
@@ -54,10 +51,6 @@ class TrainerDashboard : Activity() {
 
         trainerSettings.setOnClickListener {
             showSettingsDialog()
-        }
-
-        messages.setOnClickListener {
-            startActivity(Intent(this, Messages::class.java))
         }
 
         addClient.setOnClickListener {
@@ -194,60 +187,6 @@ class TrainerDashboard : Activity() {
                 }
 
                 override fun onFailure(call: Call<BasicApiResponse>, t: Throwable) {
-                    Toast.makeText(
-                        this@TrainerDashboard,
-                        "Network error: ${t.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
-    }
-
-    private fun openDirectChatWithClient(client: ClientItem) {
-        val trainerId = SessionManager(this).getUserId()
-
-        if (trainerId == -1) {
-            Toast.makeText(this, "Trainer session not found", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val request = CreateDirectConversationRequest(
-            user1Id = trainerId,
-            user2Id = client.userId
-        )
-
-        RetrofitClient.apiService.createOrGetDirectConversation(request)
-            .enqueue(object : Callback<ConversationResponse> {
-                override fun onResponse(
-                    call: Call<ConversationResponse>,
-                    response: Response<ConversationResponse>
-                ) {
-                    if (response.isSuccessful && response.body()?.success == true) {
-                        val conversationId = response.body()?.conversationId ?: -1
-
-                        if (conversationId == -1) {
-                            Toast.makeText(
-                                this@TrainerDashboard,
-                                "Invalid conversation",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return
-                        }
-
-                        val intent = Intent(this@TrainerDashboard, ChatActivity::class.java)
-                        intent.putExtra("CONVERSATION_ID", conversationId)
-                        intent.putExtra("CONVERSATION_TITLE", client.name)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(
-                            this@TrainerDashboard,
-                            "Failed to open chat",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<ConversationResponse>, t: Throwable) {
                     Toast.makeText(
                         this@TrainerDashboard,
                         "Network error: ${t.message}",

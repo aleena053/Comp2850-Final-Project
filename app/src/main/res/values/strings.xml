@@ -13,4 +13,15 @@
     <string name="training_plan_description_label">Description: %1$s</string>
     <string name="training_plan_dates_label">From %1$s to %2$s</string>
     <string name="client_workout_history_title">%1$s Workouts</string>
+    <string name="competition_date_label">Date: %1$s</string>
+    <string name="competition_location_label">Location: %1$s</string>
+    <string name="competition_sport_label">Sport: %1$s</string>
+    <string name="competition_event_type_label">Event type: %1$s</string>
+    <string name="competition_description_label">Description: %1$s</string>
+    <string name="result_competition_title">%1$s (%2$s)</string>
+    <string name="result_date_label">Date: %1$s</string>
+    <string name="result_finish_time_label">Finish time: %1$s</string>
+    <string name="result_position_label">Position: %1$s</string>
+    <string name="result_notes_label">Notes: %1$s</string>
+    <string name="username_with_at">\@%1$s</string>
 </resources>

@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+@Suppress("TooManyFunctions")
 interface ApiService {
     @POST("signup")
     fun signUp(@Body request: SignUpRequest): Call<ApiResponse>
@@ -67,4 +68,35 @@ interface ApiService {
     @DELETE("training-plans/{plan_id}")
     fun deleteTrainingPlan(@Path("plan_id") planId: Int): Call<BasicApiResponse>
 
+    @POST("competitions")
+    fun createCompetition(@Body request: CreateCompetitionRequest): Call<BasicApiResponse>
+
+    @GET("competitions/{user_id}")
+    fun getCompetitions(@Path("user_id") userId: Int): Call<CompetitionsResponse>
+
+    @DELETE("competitions/{competition_id}")
+    fun deleteCompetition(@Path("competition_id") competitionId: Int): Call<BasicApiResponse>
+
+    @POST("competition-results")
+    fun addCompetitionResult(@Body request: CreateCompetitionResultRequest): Call<BasicApiResponse>
+
+    @GET("competition-results/{user_id}")
+    fun getCompetitionResults(@Path("user_id") userId: Int): Call<CompetitionResultsResponse>
+
+    @PUT("competitions/{competition_id}")
+    fun updateCompetition(
+        @Path("competition_id") competitionId: Int,
+        @Body request: UpdateCompetitionRequest
+    ): Call<BasicApiResponse>
+
+    @PUT("competition-results/{result_id}")
+    fun updateCompetitionResult(
+        @Path("result_id") resultId: Int,
+        @Body request: UpdateCompetitionResultRequest
+    ): Call<BasicApiResponse>
+
+    @DELETE("competition-results/{result_id}")
+    fun deleteCompetitionResult(
+        @Path("result_id") resultId: Int
+    ): Call<BasicApiResponse>
 }

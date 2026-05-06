@@ -998,3 +998,522 @@ def delete_training_plan(plan_id):
 
     finally:
         connection.close()
+
+@app.route("/competitions", methods=["POST"])
+def create_competition():
+    data = request.get_json()
+
+    user_id = data.get("userId")
+    name = (data.get("name") or "").strip()
+    location = (data.get("location") or "").strip()
+    competition_date = (data.get("competitionDate") or "").strip()
+    sport_id = data.get("sportId")
+    event_type = (data.get("eventType") or "").strip()
+    description = data.get("description")
+
+    if not user_id or not name or not competition_date or not sport_id or not event_type:
+        return jsonify({"success": False, "message": "Missing required competition fields"}), 400
+
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO Competition (user_id, name, location, competition_date, sport_id, event_type, description)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (user_id, name, location, competition_date, sport_id, event_type, description))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Competition created successfully"
+            }), 201
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competitions/<int:user_id>", methods=["GET"])
+def get_competitions(user_id):
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    c.competition_id,
+                    c.name,
+                    c.location,
+                    c.competition_date,
+                    c.sport_id,
+                    c.event_type,
+                    s.sport_name,
+                    c.description
+                FROM Competition c
+                JOIN Sports s ON c.sport_id = s.sport_id
+                LEFT JOIN CompetitionResult r
+                    ON c.competition_id = r.competition_id
+                    AND r.user_id = %s
+                WHERE c.user_id = %s
+                  AND r.result_id IS NULL
+                ORDER BY c.competition_date ASC
+            """, (user_id, user_id))
+
+            rows = cursor.fetchall()
+
+            competitions = []
+            for row in rows:
+                competitions.append({
+                    "competitionId": row["competition_id"],
+                    "name": row["name"],
+                    "location": row["location"],
+                    "competitionDate": str(row["competition_date"]) if row["competition_date"] is not None else None,
+                    "sportId": row["sport_id"],
+                    "eventType": row["event_type"],
+                    "sportName": row["sport_name"],
+                    "description": row["description"]
+                })
+
+            return jsonify({
+                "success": True,
+                "competitions": competitions
+            }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competition-results", methods=["POST"])
+def add_competition_result():
+    data = request.get_json()
+
+    user_id = data.get("userId")
+    competition_id = data.get("competitionId")
+    finish_time = data.get("finishTime")
+    position = data.get("position")
+    notes = data.get("notes")
+
+    if user_id is None or competition_id is None or finish_time is None:
+        return jsonify({
+            "success": False,
+            "message": "Missing required result fields"
+        }), 400
+
+    try:
+        user_id = int(user_id)
+        competition_id = int(competition_id)
+        finish_time = float(finish_time)
+    except (TypeError, ValueError):
+        return jsonify({
+            "success": False,
+            "message": "Invalid user, competition, or finish time"
+        }), 400
+
+    if finish_time <= 0:
+        return jsonify({
+            "success": False,
+            "message": "Finish time must be greater than 0"
+        }), 400
+
+    if position is not None and position != "":
+        try:
+            position = int(position)
+        except (TypeError, ValueError):
+            return jsonify({
+                "success": False,
+                "message": "Position must be a valid number"
+            }), 400
+    else:
+        position = None
+
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT competition_id, event_type
+                FROM Competition
+                WHERE competition_id = %s
+            """, (competition_id,))
+            competition = cursor.fetchone()
+
+            if not competition:
+                return jsonify({
+                    "success": False,
+                    "message": "Competition not found"
+                }), 404
+
+            event_type = competition["event_type"]
+
+            cursor.execute("""
+                SELECT MIN(r.finish_time) AS best_time
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                WHERE r.user_id = %s
+                  AND c.event_type = %s
+            """, (user_id, event_type))
+            best_row = cursor.fetchone()
+
+            previous_best = best_row["best_time"] if best_row and best_row["best_time"] is not None else None
+            is_personal_best = previous_best is None or finish_time < float(previous_best)
+
+            cursor.execute("""
+                INSERT INTO CompetitionResult (
+                    user_id,
+                    competition_id,
+                    finish_time,
+                    position,
+                    notes,
+                    is_personal_best
+                )
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (
+                user_id,
+                competition_id,
+                finish_time,
+                position,
+                notes,
+                1 if is_personal_best else 0
+            ))
+
+            new_result_id = cursor.lastrowid
+
+            if is_personal_best:
+                cursor.execute("""
+                    UPDATE CompetitionResult r
+                    JOIN Competition c ON r.competition_id = c.competition_id
+                    SET r.is_personal_best = 0
+                    WHERE r.user_id = %s
+                      AND c.event_type = %s
+                      AND r.result_id <> %s
+                """, (user_id, event_type, new_result_id))
+
+                cursor.execute("""
+                    UPDATE CompetitionResult
+                    SET is_personal_best = 1
+                    WHERE result_id = %s
+                """, (new_result_id,))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Competition result added successfully",
+                "isPersonalBest": bool(is_personal_best)
+            }), 201
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competition-results/<int:user_id>", methods=["GET"])
+def get_competition_results(user_id):
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    r.result_id,
+                    r.user_id,
+                    r.competition_id,
+                    r.finish_time,
+                    r.position,
+                    r.notes,
+                    r.is_personal_best,
+                    c.name,
+                    c.location,
+                    c.competition_date,
+                    c.event_type,
+                    s.sport_name
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                JOIN Sports s ON c.sport_id = s.sport_id
+                WHERE r.user_id = %s
+                ORDER BY c.competition_date DESC
+            """, (user_id,))
+            rows = cursor.fetchall()
+
+            results = []
+            for row in rows:
+                results.append({
+                    "resultId": row["result_id"],
+                    "userId": row["user_id"],
+                    "competitionId": row["competition_id"],
+                    "finishTime": float(row["finish_time"]) if row["finish_time"] is not None else None,
+                    "position": row["position"],
+                    "notes": row["notes"],
+                    "isPersonalBest": bool(row["is_personal_best"]),
+                    "name": row["name"],
+                    "location": row["location"],
+                    "competitionDate": str(row["competition_date"]) if row["competition_date"] is not None else None,
+                    "eventType": row["event_type"],
+                    "sportName": row["sport_name"]
+                })
+
+            return jsonify({
+                "success": True,
+                "results": results
+            }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+@app.route("/competitions/<int:competition_id>", methods=["DELETE"])
+def delete_competition(competition_id):
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM Competition WHERE competition_id = %s", (competition_id,))
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return jsonify({"success": False, "message": "Competition not found"}), 404
+
+            return jsonify({
+                "success": True,
+                "message": "Competition deleted successfully"
+            }), 200
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competitions/<int:competition_id>", methods=["PUT"])
+def update_competition(competition_id):
+    data = request.get_json()
+
+    name = (data.get("name") or "").strip()
+    location = (data.get("location") or "").strip()
+    competition_date = (data.get("competitionDate") or "").strip()
+    sport_id = data.get("sportId")
+    event_type = (data.get("eventType") or "").strip()
+    description = data.get("description")
+
+    if not name or not competition_date or not sport_id or not event_type:
+        return jsonify({"success": False, "message": "Missing required competition fields"}), 400
+
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE Competition
+                SET name = %s,
+                    location = %s,
+                    competition_date = %s,
+                    sport_id = %s,
+                    event_type = %s,
+                    description = %s
+                WHERE competition_id = %s
+            """, (
+                name,
+                location,
+                competition_date,
+                sport_id,
+                event_type,
+                description,
+                competition_id
+            ))
+
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return jsonify({"success": False, "message": "Competition not found"}), 404
+
+            return jsonify({
+                "success": True,
+                "message": "Competition updated successfully"
+            }), 200
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competition-results/<int:result_id>", methods=["PUT"])
+def update_competition_result(result_id):
+    data = request.get_json()
+
+    finish_time = data.get("finishTime")
+    position = data.get("position")
+    notes = data.get("notes")
+
+    if finish_time is None:
+        return jsonify({"success": False, "message": "Missing finish time"}), 400
+
+    try:
+        finish_time = float(finish_time)
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "message": "Finish time must be a valid number"}), 400
+
+    if finish_time <= 0:
+        return jsonify({"success": False, "message": "Finish time must be greater than 0"}), 400
+
+    if position is not None and position != "":
+        try:
+            position = int(position)
+        except (TypeError, ValueError):
+            return jsonify({"success": False, "message": "Position must be a valid number"}), 400
+    else:
+        position = None
+
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT r.user_id, c.event_type
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                WHERE r.result_id = %s
+            """, (result_id,))
+            existing = cursor.fetchone()
+
+            if not existing:
+                return jsonify({"success": False, "message": "Result not found"}), 404
+
+            user_id = existing["user_id"]
+            event_type = existing["event_type"]
+
+            cursor.execute("""
+                UPDATE CompetitionResult
+                SET finish_time = %s,
+                    position = %s,
+                    notes = %s
+                WHERE result_id = %s
+            """, (
+                finish_time,
+                position,
+                notes,
+                result_id
+            ))
+
+            cursor.execute("""
+                UPDATE CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                SET r.is_personal_best = 0
+                WHERE r.user_id = %s
+                  AND c.event_type = %s
+            """, (user_id, event_type))
+
+            cursor.execute("""
+                SELECT r.result_id
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                WHERE r.user_id = %s
+                  AND c.event_type = %s
+                ORDER BY r.finish_time ASC, r.result_id ASC
+                LIMIT 1
+            """, (user_id, event_type))
+            best = cursor.fetchone()
+
+            if best:
+                cursor.execute("""
+                    UPDATE CompetitionResult
+                    SET is_personal_best = 1
+                    WHERE result_id = %s
+                """, (best["result_id"],))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Result updated successfully"
+            }), 200
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()
+
+
+@app.route("/competition-results/<int:result_id>", methods=["DELETE"])
+def delete_competition_result(result_id):
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT r.user_id, c.event_type
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                WHERE r.result_id = %s
+            """, (result_id,))
+            existing = cursor.fetchone()
+
+            if not existing:
+                return jsonify({"success": False, "message": "Result not found"}), 404
+
+            user_id = existing["user_id"]
+            event_type = existing["event_type"]
+
+            cursor.execute("DELETE FROM CompetitionResult WHERE result_id = %s", (result_id,))
+
+            cursor.execute("""
+                UPDATE CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                SET r.is_personal_best = 0
+                WHERE r.user_id = %s
+                  AND c.event_type = %s
+            """, (user_id, event_type))
+
+            cursor.execute("""
+                SELECT r.result_id
+                FROM CompetitionResult r
+                JOIN Competition c ON r.competition_id = c.competition_id
+                WHERE r.user_id = %s
+                  AND c.event_type = %s
+                ORDER BY r.finish_time ASC, r.result_id ASC
+                LIMIT 1
+            """, (user_id, event_type))
+            best = cursor.fetchone()
+
+            if best:
+                cursor.execute("""
+                    UPDATE CompetitionResult
+                    SET is_personal_best = 1
+                    WHERE result_id = %s
+                """, (best["result_id"],))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Result deleted successfully"
+            }), 200
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+
+    finally:
+        connection.close()

@@ -11,14 +11,12 @@ class ClientAdapter(
     private val clients: MutableList<ClientItem>,
     private val clientClick: (ClientItem) -> Unit,
     private val removeClick: (ClientItem) -> Unit,
-    private val messageClick: (ClientItem) -> Unit
 ) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
 
     class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val clientName: TextView = itemView.findViewById(R.id.client_name)
         val clientEmail: TextView = itemView.findViewById(R.id.client_email)
         val removeClient: Button = itemView.findViewById(R.id.remove_client)
-        val messageClient: Button = itemView.findViewById(R.id.messageClient)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientViewHolder {
@@ -39,10 +37,6 @@ class ClientAdapter(
 
         holder.removeClient.setOnClickListener {
             removeClick(client)
-        }
-
-        holder.messageClient.setOnClickListener {
-            messageClick(client)
         }
     }
 
