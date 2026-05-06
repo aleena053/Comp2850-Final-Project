@@ -72,3 +72,60 @@ CREATE TABLE CompetitionResult (
     FOREIGN KEY (competition_id)    REFERENCES Competition(competition_id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE TrainerClients (
+    trainer_id INT NOT NULL,
+    client_id INT NOT NULL,
+    PRIMARY KEY (trainer_id, client_id),
+    KEY client_id (client_id),
+    CONSTRAINT trainerclients_ibfk_1
+        FOREIGN KEY (trainer_id) REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    CONSTRAINT trainerclients_ibfk_2
+        FOREIGN KEY (client_id) REFERENCES Users(user_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Conversation (
+    conversation_id INT NOT NULL AUTO_INCREMENT,
+    conversation_type ENUM('direct','group') NOT NULL,
+    title VARCHAR(255) DEFAULT NULL,
+    created_by_user_id INT NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (conversation_id),
+    KEY created_by_user_id (created_by_user_id),
+    CONSTRAINT conversation_ibfk_1
+        FOREIGN KEY (created_by_user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE ConversationParticipant (
+    conversation_id INT NOT NULL,
+    user_id INT NOT NULL,
+    participant_role ENUM('admin','creator','member') NOT NULL,
+    joined_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (conversation_id, user_id),
+    KEY user_id (user_id),
+    CONSTRAINT conversationparticipant_ibfk_1
+        FOREIGN KEY (conversation_id) REFERENCES Conversation(conversation_id)
+        ON DELETE CASCADE,
+    CONSTRAINT conversationparticipant_ibfk_2
+        FOREIGN KEY (user_id) REFERENCES Users(user_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Message (
+    message_id INT NOT NULL AUTO_INCREMENT,
+    conversation_id INT NOT NULL,
+    sender_user_id INT NOT NULL,
+    message_text TEXT NOT NULL,
+    sent_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (message_id),
+    KEY conversation_id (conversation_id),
+    KEY sender_user_id (sender_user_id),
+    CONSTRAINT message_ibfk_1
+        FOREIGN KEY (conversation_id) REFERENCES Conversation(conversation_id)
+        ON DELETE CASCADE,
+    CONSTRAINT message_ibfk_2
+        FOREIGN KEY (sender_user_id) REFERENCES Users(user_id)
+        ON DELETE CASCADE
+);
