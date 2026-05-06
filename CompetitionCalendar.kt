@@ -41,6 +41,7 @@ class CompetitionCalendar : Activity() {
         }
     }
 
+    // links xml views to code
     private fun bindViews() {
         backCompetitionCalendar = findViewById(R.id.backCompetitionCalendar)
         previousMonth = findViewById(R.id.previousMonth)
@@ -50,6 +51,7 @@ class CompetitionCalendar : Activity() {
         calendarSummary = findViewById(R.id.calendarSummary)
     }
 
+    // handles clicks for back and month swaps
     private fun setupListeners() {
         backCompetitionCalendar.setOnClickListener {
             finish()
@@ -66,6 +68,7 @@ class CompetitionCalendar : Activity() {
         }
     }
 
+    // gets all events from api
     private fun loadCompetitionsForCalendar() {
         val userId = SessionManager(this).getUserId()
 
@@ -84,11 +87,12 @@ class CompetitionCalendar : Activity() {
                 }
 
                 override fun onFailure(call: Call<CompetitionsResponse>, t: Throwable) {
-                    showToast("Error: ${t.localizedMessage}")
+                    showToast("error: ${t.localizedMessage}")
                 }
             })
     }
 
+    // refreshes the calendar grid and text summary
     private fun updateCalendarSection(competitions: List<CompetitionItem>) {
         val competitionsThisMonth = getCompetitionsThisMonth(competitions)
         val competitionDays = competitionsThisMonth.map { it.first.dayOfMonth }.toSet()
@@ -103,6 +107,7 @@ class CompetitionCalendar : Activity() {
         calendarSummary.text = createCalendarSummary(competitionsThisMonth)
     }
 
+    // filters the list for the chosen month
     private fun getCompetitionsThisMonth(
         competitions: List<CompetitionItem>
     ): List<Pair<LocalDate, CompetitionItem>> {
@@ -116,6 +121,7 @@ class CompetitionCalendar : Activity() {
         }.sortedBy { it.first }
     }
 
+    // converts date string to localdate
     private fun convertCompetitionDate(item: CompetitionItem): LocalDate? {
         return try {
             LocalDate.parse(
@@ -127,6 +133,7 @@ class CompetitionCalendar : Activity() {
         }
     }
 
+    // builds the text summary for events
     private fun createCalendarSummary(
         competitionsThisMonth: List<Pair<LocalDate, CompetitionItem>>
     ): String {
@@ -152,9 +159,9 @@ class CompetitionCalendar : Activity() {
         private const val DISPLAY_DATE_PATTERN = "dd MMM yyyy"
         private const val NEW_LINE_SEPARATOR = "\n"
         private const val LOAD_COMPETITIONS_FAILED_MESSAGE =
-            "Failed to load competitions"
+            "failed to load competitions"
         private const val NO_EVENTS_THIS_MONTH_MESSAGE =
-            "No upcoming events this month"
+            "no upcoming events this month"
         private val dateParser: DateTimeFormatter =
             DateTimeFormatter.ofPattern(ISO_DATE_PATTERN, Locale.ENGLISH)
         private val monthFormatter: DateTimeFormatter =

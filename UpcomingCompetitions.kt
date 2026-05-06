@@ -1,14 +1,6 @@
 package com.example.myapplication
 
-import android.app.Activity
-import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+// imports
 
 class UpcomingCompetitions : Activity() {
 
@@ -31,6 +23,7 @@ class UpcomingCompetitions : Activity() {
         loadCompetitions()
     }
 
+    // links xml views to code
     private fun bindViews() {
         backUpcomingCompetitions = findViewById(R.id.backUpcomingCompetitions)
         recyclerAllUpcomingCompetitions = findViewById(
@@ -38,6 +31,7 @@ class UpcomingCompetitions : Activity() {
         )
     }
 
+    // sets up list and adapter
     private fun setupRecyclerView() {
         competitionAdapter = Competition(this, mutableListOf()) {
             loadCompetitions()
@@ -47,12 +41,14 @@ class UpcomingCompetitions : Activity() {
         recyclerAllUpcomingCompetitions.adapter = competitionAdapter
     }
 
+    // handles back button click
     private fun setupListeners() {
         backUpcomingCompetitions.setOnClickListener {
             finish()
         }
     }
 
+    // gets competition data from api
     private fun loadCompetitions() {
         val userId = SessionManager(this).getUserId()
 
@@ -74,11 +70,12 @@ class UpcomingCompetitions : Activity() {
                     call: Call<CompetitionsResponse>,
                     t: Throwable
                 ) {
-                    showToast("Error: ${t.localizedMessage}", Toast.LENGTH_LONG)
+                    showToast("error: ${t.localizedMessage}", Toast.LENGTH_LONG)
                 }
             })
     }
 
+    // helper for alerts
     private fun showToast(
         message: String,
         duration: Int = Toast.LENGTH_SHORT
@@ -88,6 +85,6 @@ class UpcomingCompetitions : Activity() {
 
     companion object {
         private const val LOAD_COMPETITIONS_FAILED_MESSAGE =
-            "Failed to load competitions"
+            "failed to load competitions"
     }
 }
