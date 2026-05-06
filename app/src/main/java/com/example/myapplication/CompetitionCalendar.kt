@@ -21,7 +21,6 @@ class CompetitionCalendar : Activity() {
     private lateinit var calendarMonth: TextView
     private lateinit var competitionCalendarView: CompetitionCalendarView
     private lateinit var calendarSummary: TextView
-
     private var allCompetitions: List<CompetitionItem> = emptyList()
     private var selectedMonth: YearMonth = YearMonth.now()
 
@@ -87,7 +86,7 @@ class CompetitionCalendar : Activity() {
                 }
 
                 override fun onFailure(call: Call<CompetitionsResponse>, t: Throwable) {
-                    showToast("error: ${t.localizedMessage}")
+                    showToast("Error: ${t.localizedMessage}")
                 }
             })
     }
@@ -159,9 +158,9 @@ class CompetitionCalendar : Activity() {
         private const val DISPLAY_DATE_PATTERN = "dd MMM yyyy"
         private const val NEW_LINE_SEPARATOR = "\n"
         private const val LOAD_COMPETITIONS_FAILED_MESSAGE =
-            "failed to load competitions"
+            "Failed to load competitions"
         private const val NO_EVENTS_THIS_MONTH_MESSAGE =
-            "no upcoming events this month"
+            "No upcoming events this month"
         private val dateParser: DateTimeFormatter =
             DateTimeFormatter.ofPattern(ISO_DATE_PATTERN, Locale.ENGLISH)
         private val monthFormatter: DateTimeFormatter =

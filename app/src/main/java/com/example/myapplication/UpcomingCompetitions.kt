@@ -1,6 +1,14 @@
 package com.example.myapplication
 
-// imports
+import android.app.Activity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class UpcomingCompetitions : Activity() {
 
@@ -70,7 +78,7 @@ class UpcomingCompetitions : Activity() {
                     call: Call<CompetitionsResponse>,
                     t: Throwable
                 ) {
-                    showToast("error: ${t.localizedMessage}", Toast.LENGTH_LONG)
+                    showToast("Error: ${t.localizedMessage}", Toast.LENGTH_LONG)
                 }
             })
     }
@@ -85,6 +93,6 @@ class UpcomingCompetitions : Activity() {
 
     companion object {
         private const val LOAD_COMPETITIONS_FAILED_MESSAGE =
-            "failed to load competitions"
+            "Failed to load competitions"
     }
 }

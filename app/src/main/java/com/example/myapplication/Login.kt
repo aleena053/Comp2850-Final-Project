@@ -67,6 +67,19 @@ class Login : Activity() {
                     val sessionManager = SessionManager(this@Login)
                     sessionManager.saveUserSession(user)
 
+                    val intent = when (user.role.lowercase()) {
+                        "trainer" -> Intent(this@Login, TrainerDashboard::class.java)
+                        "athlete", "casual runner" -> Intent(this@Login, AthleteDashboard::class.java)
+                        else -> Intent(this@Login, AthleteDashboard::class.java)
+                    }
+
+                    intent.putExtra("USER_ID", user.userId)
+                    intent.putExtra("USER_NAME", user.name)
+                    intent.putExtra("USERNAME", user.username)
+                    intent.putExtra("USER_EMAIL", user.email)
+                    intent.putExtra("USER_ROLE", user.role)
+
+                    startActivity(intent)
                     //close login screen if login was successfull
                     finish()
                 } else {

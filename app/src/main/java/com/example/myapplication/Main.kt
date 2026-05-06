@@ -20,6 +20,12 @@ class Main : Activity() {
             val email = sessionManager.getUserEmail()
             val userId = sessionManager.getUserId()
 
+            val intent = when (role.lowercase()) {
+                "trainer" -> Intent(this, TrainerDashboard::class.java)
+                "athlete", "casual runner" -> Intent(this, AthleteDashboard::class.java)
+                else -> Intent(this, Home::class.java)
+            }
+
             intent.putExtra("USER_ID", userId)
             intent.putExtra("USER_NAME", name)
             intent.putExtra("USER_EMAIL", email)
