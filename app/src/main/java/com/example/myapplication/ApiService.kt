@@ -36,4 +36,35 @@ interface ApiService {
     @GET("dashboard-stats/{user_id}")
     fun getDashboardStats(@Path("user_id") userId: Int): Call<DashboardStatsResponse>
 
+
+    @POST("trainer/add-client")
+    fun addClient(@Body request: AddClientRequest): Call<ApiResponse>
+
+    @GET("trainer/{trainer_id}/clients")
+    fun getTrainerClients(@Path("trainer_id") trainerId: Int): Call<ClientListResponse>
+
+    @DELETE("trainer/{trainer_id}/clients/{client_id}")
+    fun removeClient(
+        @Path("trainer_id") trainerId: Int,
+        @Path("client_id") clientId: Int
+    ): Call<BasicApiResponse>
+
+    @POST("training-plans")
+    fun createTrainingPlan(@Body request: CreateTrainingPlanRequest): Call<BasicApiResponse>
+
+    @GET("training-plans/{user_id}")
+    fun getTrainingPlans(@Path("user_id") userId: Int): Call<TrainingPlansResponse>
+
+    @GET("training-plans/detail/{plan_id}")
+    fun getTrainingPlanDetail(@Path("plan_id") planId: Int): Call<TrainingPlanDetailResponse>
+
+    @PUT("training-plans/{plan_id}")
+    fun updateTrainingPlan(
+        @Path("plan_id") planId: Int,
+        @Body request: UpdateTrainingPlanRequest
+    ): Call<BasicApiResponse>
+
+    @DELETE("training-plans/{plan_id}")
+    fun deleteTrainingPlan(@Path("plan_id") planId: Int): Call<BasicApiResponse>
+
 }

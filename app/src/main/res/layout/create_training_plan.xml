@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <Button
+            android:id="@+id/backTrainingPlan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false"
+            android:textColor="@color/button_text_dark"
+            android:backgroundTint="@color/button_light"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Training Plan"
+            android:textColor="@color/text_primary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/planName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Plan name"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"
+            android:backgroundTint="@color/input_line"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/planDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"
+            android:backgroundTint="@color/input_line"
+            android:minLines="3"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Start date"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"
+            android:backgroundTint="@color/input_line"
+            android:focusable="false"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/endDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="End date"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"
+            android:backgroundTint="@color/input_line"
+            android:focusable="false"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/saveTrainingPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAVE TRAINING PLAN"
+            android:textColor="@color/button_text_dark"
+            android:backgroundTint="@color/button_light" />
+
+    </LinearLayout>
+</ScrollView>

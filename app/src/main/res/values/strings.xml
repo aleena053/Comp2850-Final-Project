@@ -9,4 +9,8 @@
     <string name="workout_notes_label">Notes: %1$s</string>
     <string name="workout_distance_label">Distance: %1$s km</string>
     <string name="workout_pace_label">Pace: %1$s min/km</string>
+    <string name="client_training_plans_title">%1$s Training Plans</string>
+    <string name="training_plan_description_label">Description: %1$s</string>
+    <string name="training_plan_dates_label">From %1$s to %2$s</string>
+    <string name="client_workout_history_title">%1$s Workouts</string>
 </resources>
