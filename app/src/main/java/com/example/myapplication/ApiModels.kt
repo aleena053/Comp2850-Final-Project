@@ -89,26 +89,6 @@ data class UpdateWorkoutRequest(
     val exercises: List<ExerciseEntry>? = null
 )
 
-
-data class DailyDistanceItem(
-    val label: String,
-    val distance: Double
-)
-
-data class DashboardStats(
-    val thisWeekDistance: Double,
-    val thisWeekDuration: Int,
-    val thisWeekAvgPace: Double,
-    val thisWeekAvgHeartRate: Double,
-    val dailyDistance: List<DailyDistanceItem>
-)
-
-data class DashboardStatsResponse(
-    val success: Boolean,
-    val stats: DashboardStats
-)
-
-
 data class AddClientRequest(
     val trainerId: Int,
     val clientEmail: String
@@ -161,6 +141,24 @@ data class UpdateTrainingPlanRequest(
     val description: String,
     val startDate: String,
     val endDate: String
+)
+
+data class DailyDistanceItem(
+    val label: String,
+    val distance: Double
+)
+
+data class DashboardStats(
+    val thisWeekDistance: Double,
+    val thisWeekDuration: Int,
+    val thisWeekAvgPace: Double,
+    val thisWeekAvgHeartRate: Double,
+    val dailyDistance: List<DailyDistanceItem>
+)
+
+data class DashboardStatsResponse(
+    val success: Boolean,
+    val stats: DashboardStats
 )
 
 data class CompetitionItem(
@@ -230,4 +228,78 @@ data class UpdateCompetitionResultRequest(
     val finishTime: Double,
     val position: Int?,
     val notes: String?
+)
+
+data class ConversationItem(
+    val conversationId: Int,
+    val conversationType: String,
+    val title: String?,
+    val username: String?,
+    val createdAt: String?,
+    val lastMessage: String?,
+    val lastMessageTime: String?
+)
+
+data class MessageItem(
+    val messageId: Int,
+    val conversationId: Int,
+    val senderUserId: Int,
+    val senderName: String,
+    val messageText: String,
+    val sentAt: String
+)
+
+data class CreateDirectConversationRequest(
+    val user1Id: Int,
+    val user2Id: Int
+)
+
+data class SendMessageRequest(
+    val conversationId: Int,
+    val senderUserId: Int,
+    val messageText: String
+)
+
+data class ConversationResponse(
+    val success: Boolean,
+    val conversationId: Int?
+)
+
+data class ConversationsResponse(
+    val success: Boolean,
+    val conversations: List<ConversationItem>
+)
+
+data class MessagesResponse(
+    val success: Boolean,
+    val messages: List<MessageItem>
+)
+
+data class CreateGroupByUsernamesRequest(
+    val createdByUserId: Int,
+    val title: String,
+    val usernames: List<String>
+)
+
+data class AddMemberByUsernameRequest(
+    val username: String
+)
+
+data class LeaveGroupRequest(
+    val userId: Int
+)
+
+data class GroupMemberItem(
+    val userId: Int,
+    val name: String,
+    val username: String?,
+    val participantRole: String,
+    val joinedAt: String?
+)
+
+data class GroupMembersResponse(
+    val success: Boolean,
+    val groupTitle: String?,
+    val members: List<GroupMemberItem>,
+    val message: String? = null
 )

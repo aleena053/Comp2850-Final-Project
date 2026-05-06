@@ -2,11 +2,11 @@ package com.example.myapplication
 
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.DELETE
+import retrofit2.http.PUT
 
 @Suppress("TooManyFunctions")
 interface ApiService {
@@ -33,10 +33,6 @@ interface ApiService {
 
     @DELETE("workouts/{workout_id}")
     fun deleteWorkout(@Path("workout_id") workoutId: Int): Call<BasicApiResponse>
-
-    @GET("dashboard-stats/{user_id}")
-    fun getDashboardStats(@Path("user_id") userId: Int): Call<DashboardStatsResponse>
-
 
     @POST("trainer/add-client")
     fun addClient(@Body request: AddClientRequest): Call<ApiResponse>
@@ -67,6 +63,9 @@ interface ApiService {
 
     @DELETE("training-plans/{plan_id}")
     fun deleteTrainingPlan(@Path("plan_id") planId: Int): Call<BasicApiResponse>
+
+    @GET("dashboard-stats/{user_id}")
+    fun getDashboardStats(@Path("user_id") userId: Int): Call<DashboardStatsResponse>
 
     @POST("competitions")
     fun createCompetition(@Body request: CreateCompetitionRequest): Call<BasicApiResponse>
@@ -99,4 +98,39 @@ interface ApiService {
     fun deleteCompetitionResult(
         @Path("result_id") resultId: Int
     ): Call<BasicApiResponse>
+
+    @POST("conversations/direct")
+    fun createOrGetDirectConversation(
+        @Body request: CreateDirectConversationRequest
+    ): Call<ConversationResponse>
+    @GET("conversations/{user_id}")
+    fun getConversations(@Path("user_id") userId: Int): Call<ConversationsResponse>
+
+    @GET("messages/{conversation_id}")
+    fun getMessages(@Path("conversation_id") conversationId: Int): Call<MessagesResponse>
+
+    @POST("messages")
+    fun sendMessage(@Body request: SendMessageRequest): Call<BasicApiResponse>
+
+    @POST("conversations/group/by-usernames")
+    fun createGroupConversationByUsernames(
+        @Body request: CreateGroupByUsernamesRequest
+    ): Call<ConversationResponse>
+
+    @POST("conversations/group/{conversation_id}/members/by-username")
+    fun addGroupMemberByUsername(
+        @Path("conversation_id") conversationId: Int,
+        @Body request: AddMemberByUsernameRequest
+    ): Call<BasicApiResponse>
+
+    @POST("conversations/group/{conversation_id}/leave")
+    fun leaveGroup(
+        @Path("conversation_id") conversationId: Int,
+        @Body request: LeaveGroupRequest
+    ): Call<BasicApiResponse>
+
+    @GET("conversations/group/{conversation_id}/members")
+    fun getGroupMembers(
+        @Path("conversation_id") conversationId: Int
+    ): Call<GroupMembersResponse>
 }

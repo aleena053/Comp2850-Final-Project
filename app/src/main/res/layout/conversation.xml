@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="#2E2E2E"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <TextView
+        android:id="@+id/conversationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Conversation"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/conversationUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="/@username"
+        android:textColor="#BDBDBD"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/conversationLastMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Last message preview"
+        android:textColor="#D0D0D0"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/conversationTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="2026-05-01 10:00"
+        android:textColor="#A8A8A8"
+        android:textSize="12sp" />
+
+</LinearLayout>
