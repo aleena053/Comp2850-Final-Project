@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <Button
+            android:id="@+id/backClientPlans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false"
+            android:textColor="@color/button_text_dark"
+            android:backgroundTint="@color/button_light"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/clientPlansTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client Training Plans"
+            android:textColor="@color/text_primary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/createTrainingPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CREATE TRAINING PLAN"
+            android:textColor="@color/button_text_dark"
+            android:backgroundTint="@color/button_light"
+            android:layout_marginBottom="24dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutPlansContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+</ScrollView>

@@ -107,3 +107,59 @@ data class DashboardStatsResponse(
     val success: Boolean,
     val stats: DashboardStats
 )
+
+
+data class AddClientRequest(
+    val trainerId: Int,
+    val clientEmail: String
+)
+
+data class ClientItem(
+    val userId: Int,
+    val name: String,
+    val email: String,
+    val role: String?,
+    val fitnessLevel: String?
+)
+
+data class ClientListResponse(
+    val success: Boolean,
+    val clients: List<ClientItem>
+)
+
+data class CreateTrainingPlanRequest(
+    val userId: Int,
+    val createdByUserId: Int,
+    val planName: String,
+    val description: String,
+    val startDate: String,
+    val endDate: String
+)
+
+data class TrainingPlanItem(
+    val planId: Int,
+    val userId: Int,
+    val planName: String,
+    val description: String?,
+    val startDate: String,
+    val endDate: String
+)
+
+data class TrainingPlansResponse(
+    val success: Boolean,
+    val plans: List<TrainingPlanItem>
+)
+
+data class TrainingPlanDetailResponse(
+    val success: Boolean,
+    val plan: TrainingPlanItem? = null,
+    val message: String? = null
+)
+
+data class UpdateTrainingPlanRequest(
+    val planName: String,
+    val description: String,
+    val startDate: String,
+    val endDate: String
+)
+
