@@ -15,6 +15,7 @@ import retrofit2.Response
 
 @Suppress("TooManyFunctions")
 class ClientTrainingPlans : Activity() {
+    //Trainer, view/create training plan of client
 
     private var clientId: Int = INVALID_CLIENT_ID
     private var clientName: String = DEFAULT_CLIENT_NAME
@@ -40,7 +41,7 @@ class ClientTrainingPlans : Activity() {
         super.onResume()
         loadPlans()
     }
-
+    //links the buttons, title, and layout container from the XML to the Kt
     private fun bindViews() {
         backClientPlans = findViewById(R.id.backClientPlans)
         createTrainingPlan = findViewById(R.id.createTrainingPlan)
@@ -50,7 +51,6 @@ class ClientTrainingPlans : Activity() {
 
     private fun setupScreen() {
         clientPlansTitle.text = getString(R.string.client_training_plans_title, clientName)
-
         backClientPlans.setOnClickListener {
             finish()
         }
@@ -59,7 +59,7 @@ class ClientTrainingPlans : Activity() {
             openCreateTrainingPlanScreen()
         }
     }
-
+    //client ID is passed to the next screen so the new plan can be linked to the correct client
     private fun openCreateTrainingPlanScreen() {
         val intent = Intent(this, CreateTrainingPlan::class.java).apply {
             putExtra(CLIENT_ID_EXTRA, clientId)
@@ -67,6 +67,7 @@ class ClientTrainingPlans : Activity() {
         startActivity(intent)
     }
 
+    //loads the client’s training plans
     private fun loadPlans() {
         if (clientId == INVALID_CLIENT_ID) {
             Toast.makeText(this, INVALID_CLIENT_MESSAGE, Toast.LENGTH_SHORT).show()
@@ -74,6 +75,7 @@ class ClientTrainingPlans : Activity() {
             return
         }
 
+        //Give all training plans for this client ID
         RetrofitClient.apiService.getTrainingPlans(clientId)
             .enqueue(object : Callback<TrainingPlansResponse> {
                 override fun onResponse(
@@ -108,13 +110,14 @@ class ClientTrainingPlans : Activity() {
     }
 
     private fun showPlans(plans: List<TrainingPlanItem>) {
+        //clears the old displayed plans
         layoutPlansContainer.removeAllViews()
 
         if (plans.isEmpty()) {
             layoutPlansContainer.addView(createEmptyPlansTextView())
             return
         }
-
+        //removes old views first, then creates and displays a card for each training plan.
         plans.forEach { plan ->
             layoutPlansContainer.addView(createPlanCard(plan))
         }

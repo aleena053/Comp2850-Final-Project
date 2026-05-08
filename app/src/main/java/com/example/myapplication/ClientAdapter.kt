@@ -8,12 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ClientAdapter(
+    //sends the clicked client back to the activity using callback functions
     private val clients: MutableList<ClientItem>,
     private val clientClick: (ClientItem) -> Unit,
     private val removeClick: (ClientItem) -> Unit,
     private val messageClick: (ClientItem) -> Unit
 ) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
 
+    //stores the UI components for each client item so the RecyclerView can reuse
     class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val clientName: TextView = itemView.findViewById(R.id.client_name)
         val clientEmail: TextView = itemView.findViewById(R.id.client_email)
@@ -26,7 +28,7 @@ class ClientAdapter(
             .inflate(R.layout.client, parent, false)
         return ClientViewHolder(view)
     }
-
+    //display client data
     override fun onBindViewHolder(holder: ClientViewHolder, position: Int) {
         val client = clients[position]
 

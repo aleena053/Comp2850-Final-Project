@@ -27,6 +27,8 @@ class ClientWorkoutHistory : Activity() {
     private var clientId: Int = INVALID_CLIENT_ID
     private var clientName: String = DEFAULT_CLIENT_NAME
 
+    //prepares the screen, reads the selected client information,
+    // sets up the workout list, and loads the client’s workout history.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.client_workout_history)
@@ -52,6 +54,7 @@ class ClientWorkoutHistory : Activity() {
         recyclerClientWorkoutHistory = findViewById(R.id.recyclerClientWorkoutHistory)
     }
 
+    //gets the client ID and name from the previous screen
     private fun readIntentData() {
         clientId = intent.getIntExtra(CLIENT_ID_EXTRA, INVALID_CLIENT_ID)
         clientName = intent.getStringExtra(CLIENT_NAME_EXTRA) ?: DEFAULT_CLIENT_NAME
@@ -64,7 +67,9 @@ class ClientWorkoutHistory : Activity() {
         )
     }
 
+    //displays many workout records in a scrollable list.
     private fun setupRecyclerView() {
+        //empty first
         workoutAdapter = Workout(mutableListOf()) {
             Toast.makeText(this, TRAINER_VIEW_ONLY_MESSAGE, Toast.LENGTH_SHORT).show()
         }
@@ -74,16 +79,18 @@ class ClientWorkoutHistory : Activity() {
     }
 
     private fun setupListeners() {
+        //Close current, go back previous
         backClientWorkoutHistory.setOnClickListener {
             finish()
         }
-
+        //opens the selected client’s training plans page
         viewTrainingPlans.setOnClickListener {
             openClientTrainingPlans()
         }
 
         searchClientWorkout.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                //the workout list will be filtered based on the search text
                 workoutAdapter.filter(s.toString())
             }
 
@@ -118,6 +125,7 @@ class ClientWorkoutHistory : Activity() {
             return
         }
 
+        //Workout list of client
         RetrofitClient.apiService.getWorkouts(clientId)
             .enqueue(object : Callback<WorkoutsResponse> {
                 override fun onResponse(

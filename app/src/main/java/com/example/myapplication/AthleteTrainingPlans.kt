@@ -22,45 +22,47 @@ class AthleteTrainingPlans : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.athlete_training_plans)
-
+        //connects buttons and RV to from XML to Kt
         backAthletePlans = findViewById(R.id.backAthletePlans)
         createTrainingPlan = findViewById(R.id.createTrainingPlan)
         recyclerTrainingPlans = findViewById(R.id.recyclerTrainingPlans)
-
+        //handles the display of each training plan and also manages the delete button action for each item
         trainingPlanAdapter = TrainingPlan(
             mutableListOf(),
             onDeleteClick = { plan ->
                 showDeletePlanDialog(plan)
             }
         )
-
+        //display all training plans dynamically
         recyclerTrainingPlans.layoutManager = LinearLayoutManager(this)
         recyclerTrainingPlans.adapter = trainingPlanAdapter
 
         backAthletePlans.setOnClickListener {
             finish()
         }
-
+        //opens CreatetrainingPlan page when clicked
         createTrainingPlan.setOnClickListener {
             startActivity(Intent(this, CreateTrainingPlan::class.java))
         }
 
         loadTrainingPlans()
     }
-
+    //makes sure training plan list is refreshed when user returns from another page
     override fun onResume() {
         super.onResume()
         loadTrainingPlans()
     }
 
     private fun loadTrainingPlans() {
+        //gets the current logged-in user’s ID from the session
         val userId = SessionManager(this).getUserId()
-
+        //checks whether user session exists
         if (userId == -1) {
             Toast.makeText(this, "User session not found", Toast.LENGTH_SHORT).show()
             return
         }
-
+        //communicate with the backend server and retrieve training plan data
+        //".enqueue" runs asynchronously (app does not freeze)
         RetrofitClient.apiService.getTrainingPlans(userId)
             .enqueue(object : Callback<TrainingPlansResponse> {
                 override fun onResponse(
@@ -78,7 +80,7 @@ class AthleteTrainingPlans : Activity() {
                         ).show()
                     }
                 }
-
+                //This runs when there is a network problem
                 override fun onFailure(call: Call<TrainingPlansResponse>, t: Throwable) {
                     Toast.makeText(
                         this@AthleteTrainingPlans,
@@ -88,7 +90,7 @@ class AthleteTrainingPlans : Activity() {
                 }
             })
     }
-
+    //popup message before deleting a training plan
     private fun showDeletePlanDialog(plan: TrainingPlanItem) {
         AlertDialog.Builder(this)
             .setTitle("Delete Training Plan")
@@ -99,7 +101,6 @@ class AthleteTrainingPlans : Activity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
     private fun deleteTrainingPlan(planId: Int) {
         RetrofitClient.apiService.deleteTrainingPlan(planId)
             .enqueue(object : Callback<BasicApiResponse> {
