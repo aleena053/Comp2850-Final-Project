@@ -8,4 +8,4 @@ MarkupSafe==3.0.3
 PyMySQL==1.1.2
 python-dotenv==1.2.2
 Werkzeug==3.1.8
-gunuicorn==23.0.0
+gunicorn==23.0.0

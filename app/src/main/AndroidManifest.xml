@@ -39,6 +39,7 @@
         <activity android:name=".LogWorkout" />
         <activity android:name=".WorkoutHistory" />
         <activity android:name=".WorkoutDetail" />
+        <activity android:name=".TrainerDashboard" />
         <activity android:name=".ClientWorkoutHistory" />
         <activity android:name=".CreateTrainingPlan" />
         <activity android:name=".ClientTrainingPlans" />
