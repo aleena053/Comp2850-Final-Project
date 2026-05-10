@@ -25,10 +25,11 @@ class ClientTrainingPlans : Activity() {
     private lateinit var clientPlansTitle: TextView
     private lateinit var layoutPlansContainer: LinearLayout
 
+    //Runs when the screen opens
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.client_training_plans)
-
+        //receives client name from previous screen
         clientId = intent.getIntExtra(CLIENT_ID_EXTRA, INVALID_CLIENT_ID)
         clientName = intent.getStringExtra(CLIENT_NAME_EXTRA) ?: DEFAULT_CLIENT_NAME
 
@@ -37,6 +38,7 @@ class ClientTrainingPlans : Activity() {
         loadPlans()
     }
 
+    // runs when user returns to this screen
     override fun onResume() {
         super.onResume()
         loadPlans()
@@ -49,6 +51,7 @@ class ClientTrainingPlans : Activity() {
         layoutPlansContainer = findViewById(R.id.layoutPlansContainer)
     }
 
+    //sets up screen title and buttons
     private fun setupScreen() {
         clientPlansTitle.text = getString(R.string.client_training_plans_title, clientName)
         backClientPlans.setOnClickListener {
@@ -59,9 +62,12 @@ class ClientTrainingPlans : Activity() {
             openCreateTrainingPlanScreen()
         }
     }
-    //client ID is passed to the next screen so the new plan can be linked to the correct client
+
+    //Opens screen for creating new training plan
     private fun openCreateTrainingPlanScreen() {
+        //creates intent to open Kt create training plan file
         val intent = Intent(this, CreateTrainingPlan::class.java).apply {
+            //sends selected client ID to the Kt file
             putExtra(CLIENT_ID_EXTRA, clientId)
         }
         startActivity(intent)
@@ -75,13 +81,16 @@ class ClientTrainingPlans : Activity() {
             return
         }
 
-        //Give all training plans for this client ID
+        //Backend gets training plan with specific client ID
         RetrofitClient.apiService.getTrainingPlans(clientId)
+            //sends request
             .enqueue(object : Callback<TrainingPlansResponse> {
+                //when backend replies
                 override fun onResponse(
                     call: Call<TrainingPlansResponse>,
                     response: Response<TrainingPlansResponse>
                 ) {
+                    //sends response to another function to check
                     handlePlansResponse(response)
                 }
 
@@ -95,6 +104,7 @@ class ClientTrainingPlans : Activity() {
             })
     }
 
+    //handles backend response from getTrainingPlans
     private fun handlePlansResponse(response: Response<TrainingPlansResponse>) {
         if (response.isSuccessful && response.body()?.success == true) {
             val plans = response.body()?.plans ?: emptyList()
@@ -109,6 +119,7 @@ class ClientTrainingPlans : Activity() {
         ).show()
     }
 
+    //Displays list of training plans
     private fun showPlans(plans: List<TrainingPlanItem>) {
         //clears the old displayed plans
         layoutPlansContainer.removeAllViews()
@@ -118,11 +129,13 @@ class ClientTrainingPlans : Activity() {
             return
         }
         //removes old views first, then creates and displays a card for each training plan.
+        //must remove so same plans won't appear twice
         plans.forEach { plan ->
             layoutPlansContainer.addView(createPlanCard(plan))
         }
     }
 
+    //Creates textview when there are no Training Plans
     private fun createEmptyPlansTextView(): TextView {
         return TextView(this).apply {
             text = NO_PLANS_MESSAGE
@@ -131,8 +144,10 @@ class ClientTrainingPlans : Activity() {
         }
     }
 
+    //Creates Training Plan Card
     private fun createPlanCard(plan: TrainingPlanItem): LinearLayout {
         return LinearLayout(this).apply {
+            // LinearLayout = the card
             orientation = LinearLayout.VERTICAL
             background = ContextCompat.getDrawable(
                 this@ClientTrainingPlans,
@@ -156,6 +171,7 @@ class ClientTrainingPlans : Activity() {
         }
     }
 
+    //Creates layout setting for each training card
     private fun createCardLayoutParams(): LinearLayout.LayoutParams {
         return LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -165,7 +181,9 @@ class ClientTrainingPlans : Activity() {
         }
     }
 
+    //Receives the selected plan ID
     private fun openTrainingPlanDetail(planId: Int) {
+        //Creates intent to open TrainingPlanDetails.kt
         val intent = Intent(this, TrainingPlanDetail::class.java).apply {
             putExtra(PLAN_ID_EXTRA, planId)
         }
