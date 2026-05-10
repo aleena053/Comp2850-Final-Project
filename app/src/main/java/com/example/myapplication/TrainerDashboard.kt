@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+//New screen called TrainerDashboard
 class TrainerDashboard : Activity() {
 
     private lateinit var trainerSettings: ImageButton
@@ -24,6 +25,7 @@ class TrainerDashboard : Activity() {
     private lateinit var clientAdapter: ClientAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //calls original ANDROID onCreate() function
         super.onCreate(savedInstanceState)
         setContentView(R.layout.trainer_dashboard)
 
@@ -33,12 +35,17 @@ class TrainerDashboard : Activity() {
         addClient = findViewById(R.id.addClient)
         recyclerClients = findViewById(R.id.recyclerClients)
 
+        //Adapter controls the client list
         clientAdapter = ClientAdapter(
             mutableListOf(),
+            //callback function, defines what happens when trainer clicks on a client row
             clientClick = { client ->
+                //preparing to open ClientWorkoutHistory screen
                 val intent = Intent(this, ClientWorkoutHistory::class.java)
+                //send ID and Name to next screen
                 intent.putExtra("CLIENT_ID", client.userId)
                 intent.putExtra("CLIENT_NAME", client.name)
+                //opens the new screen
                 startActivity(intent)
             },
             removeClick = { client ->
@@ -50,6 +57,7 @@ class TrainerDashboard : Activity() {
         )
 
         recyclerClients.layoutManager = LinearLayoutManager(this)
+        //use ClientAdapter to display client inside the list
         recyclerClients.adapter = clientAdapter
 
         trainerSettings.setOnClickListener {
@@ -74,6 +82,7 @@ class TrainerDashboard : Activity() {
 
     private fun addClient() {
         val sessionManager = SessionManager(this)
+        //gets logged-in trainer ID
         val trainerId = sessionManager.getUserId()
         val clientEmail = clientEmail.text.toString().trim()
 
@@ -91,7 +100,7 @@ class TrainerDashboard : Activity() {
             trainerId = trainerId,
             clientEmail = clientEmail
         )
-
+        //send trainer ID and client email to backend to add client
         RetrofitClient.apiService.addClient(request).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
@@ -114,6 +123,7 @@ class TrainerDashboard : Activity() {
         })
     }
 
+    //load all clients linked to the trainer
     private fun loadClients() {
         val sessionManager = SessionManager(this)
         val trainerId = sessionManager.getUserId()
@@ -170,6 +180,7 @@ class TrainerDashboard : Activity() {
             .show()
     }
 
+    //Removes a client
     private fun removeClient(client: ClientItem) {
         val sessionManager = SessionManager(this)
         val trainerId = sessionManager.getUserId()
@@ -203,6 +214,7 @@ class TrainerDashboard : Activity() {
             })
     }
 
+    //1v1 chat with selected client
     private fun openDirectChatWithClient(client: ClientItem) {
         val trainerId = SessionManager(this).getUserId()
 
@@ -211,11 +223,12 @@ class TrainerDashboard : Activity() {
             return
         }
 
+        //Creates a request object for a direct conversation, sent to backend
         val request = CreateDirectConversationRequest(
             user1Id = trainerId,
             user2Id = client.userId
         )
-
+        //Calls backend, avoid duplicate chats
         RetrofitClient.apiService.createOrGetDirectConversation(request)
             .enqueue(object : Callback<ConversationResponse> {
                 override fun onResponse(
@@ -257,12 +270,15 @@ class TrainerDashboard : Activity() {
             })
     }
 
+    //Shows setting pop-up
     private fun showSettingsDialog() {
         val options = arrayOf("Log Out")
 
         AlertDialog.Builder(this)
             .setTitle("Settings")
+            //tells which option was clicked
             .setItems(options) { _, which ->
+                //cleaner
                 when (which) {
                     0 -> {
                         val sessionManager = SessionManager(this)
